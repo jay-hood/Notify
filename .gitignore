@@ -1,3 +1,4 @@
+#ignore problematic intellij files
 .iws
 workspace.xml
 tasks.xml
