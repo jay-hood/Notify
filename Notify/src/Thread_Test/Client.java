@@ -11,6 +11,7 @@ class Client implements Runnable{
     private int port = 9000;
     private InetAddress host;
     private Scanner scanner;
+    private Scanner receiver;
     private PrintWriter printWriter;
     private String message = "";
 
@@ -21,6 +22,7 @@ class Client implements Runnable{
             host = InetAddress.getLocalHost();
             socket = new Socket(host, port);
             scanner = new Scanner(System.in);
+            receiver = new Scanner(socket.getInputStream());
             printWriter = new PrintWriter(socket.getOutputStream(), true);
         }
         catch(IOException iex){
@@ -31,6 +33,9 @@ class Client implements Runnable{
             System.out.print("Outgoing message: ");
             message = scanner.nextLine();
             printWriter.println(message);
+            message = receiver.nextLine();
+            System.out.println("Incoming message: " + message);
+
         }
     }
 

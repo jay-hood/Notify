@@ -6,6 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 //import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -16,6 +18,7 @@ public class Server{
     //public ArrayList<PrintWriter> clients = new ArrayList<>();
     private HashMap<String, PrintWriter> hashMap = new HashMap<>();
     //private PrintWriter printWriter;
+    private Iterator iterator = hashMap.entrySet().iterator();
 
 
 
@@ -66,7 +69,11 @@ public class Server{
                 hashMap.put(message,pw);
                 while (!message.toLowerCase().equals("close")) {
                     System.out.println(message);
-                    pw.println(message);
+                    for(PrintWriter out : hashMap.values()){
+                        System.out.println("Sending message.");
+                        out.println(message);
+                    }
+                    //pw.println(message);
                     message = scanner.nextLine();
 
                 }
