@@ -70,8 +70,10 @@ public class Server{
                 while (!message.toLowerCase().equals("close")) {
                     System.out.println(message);
                     for(PrintWriter out : hashMap.values()){
-                        System.out.println("Sending message.");
-                        out.println(message);
+                        if(out!=pw) {
+                            System.out.println("Sending message.");
+                            out.println(message);
+                        }
                     }
                     //pw.println(message);
                     message = scanner.nextLine();

@@ -24,6 +24,9 @@ class Client implements Runnable{
             scanner = new Scanner(System.in);
             receiver = new Scanner(socket.getInputStream());
             printWriter = new PrintWriter(socket.getOutputStream(), true);
+            ClientReader CR = new ClientReader(receiver);
+            Thread thread = new Thread(CR);
+            thread.start();
         }
         catch(IOException iex){
             iex.printStackTrace();
@@ -33,8 +36,10 @@ class Client implements Runnable{
             System.out.print("Outgoing message: ");
             message = scanner.nextLine();
             printWriter.println(message);
+            /*
             message = receiver.nextLine();
             System.out.println("Incoming message: " + message);
+            */
 
         }
     }
