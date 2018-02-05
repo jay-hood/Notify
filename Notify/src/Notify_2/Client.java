@@ -1,4 +1,4 @@
-package Thread_Test;
+package Notify_2;
 
 import java.io.IOException;
 import java.io.PrintWriter;
