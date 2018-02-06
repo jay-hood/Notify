@@ -66,7 +66,19 @@ public class Server {
                 scanner = new Scanner(connectionSocket.getInputStream());
                 pw = new PrintWriter(connectionSocket.getOutputStream(), true);
                 message = scanner.nextLine();
+                /*
+                Okay the point of this initial string is to use it as the key for the hashmap.
+                But the guy on reddit said that I should instead use a concurrenthashmap that uses a key
+                Which would be a unique username or ID that was associated with each user.
+                Rather than this, it should be something like
+                String incomingRequest = null
+                while (incomingRequest = scanner.readLine() != null) {
+                   ...
+                }
+
+                */
                 hashMap.put(message,pw);
+                //I think this is the "read message" location that the commenter on reddit was talking about.
                 while (!message.toLowerCase().equals("close")) {
                     System.out.println(message);
                     for(PrintWriter out : hashMap.values()){
