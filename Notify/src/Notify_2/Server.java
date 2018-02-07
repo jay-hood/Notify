@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 //import java.util.ArrayList;
 
@@ -16,15 +17,16 @@ public class Server {
     private int portNumber = 9000;
     private Socket socket;
     //public ArrayList<PrintWriter> clients = new ArrayList<>();
-    private HashMap<String, PrintWriter> hashMap = new HashMap<>();
+    private ConcurrentHashMap<Integer, ConnectionHandler> hashMap = new ConcurrentHashMap<>();
     //private PrintWriter printWriter;
-    private Iterator iterator = hashMap.entrySet().iterator();
+    private int ID = 0;
+
 
 
 
     public static void main(String[] args) {
         Server server = new Server();
-        server.output();
+        server.runServer();
     }
 
     public Server(){
@@ -35,13 +37,15 @@ public class Server {
             iex.printStackTrace();
         }
     }
-    public void output(){
+    public void runServer(){
         try{
             while (true) {
                 socket = serverSocket.accept();
                 ConnectionHandler CH = new ConnectionHandler(socket);
                 Thread connection = new Thread(CH);
                 connection.start();
+                hashMap.put(ID, CH);
+                ID++;
             }
         }
         catch(IOException iex){
@@ -52,9 +56,13 @@ public class Server {
     private class ConnectionHandler implements Runnable {
         private Socket connectionSocket;
         private Scanner scanner;
-        private String message;
+        private String incomingRequest;
         private PrintWriter pw;
 
+
+        public PrintWriter getPrintWriter(){
+            return this.pw;
+        }
 
         public ConnectionHandler(Socket socket) {
             this.connectionSocket = socket;
@@ -65,7 +73,9 @@ public class Server {
             try{
                 scanner = new Scanner(connectionSocket.getInputStream());
                 pw = new PrintWriter(connectionSocket.getOutputStream(), true);
-                message = scanner.nextLine();
+                incomingRequest = scanner.nextLine();
+
+
                 /*
                 Okay the point of this initial string is to use it as the key for the hashmap.
                 But the guy on reddit said that I should instead use a concurrenthashmap that uses a key
@@ -75,21 +85,21 @@ public class Server {
                 while (incomingRequest = scanner.readLine() != null) {
                    ...
                 }
-
+                Okay so apparently .readLine is a bufferedreader method. This means that I'd have to change what
+                the scanner to something else.
                 */
-                hashMap.put(message,pw);
+                //hashMap.put(message,pw);
                 //I think this is the "read message" location that the commenter on reddit was talking about.
-                while (!message.toLowerCase().equals("close")) {
-                    System.out.println(message);
-                    for(PrintWriter out : hashMap.values()){
-                        if(out!=pw) {
+                while (incomingRequest!= null) {
+                    System.out.println(incomingRequest);
+                    for(ConnectionHandler out : hashMap.values()){
+                        if(out.getPrintWriter()!=this.pw) {
                             System.out.println("Sending message.");
-                            out.println(message);
+                            out.getPrintWriter().println(incomingRequest);
                         }
                     }
                     //pw.println(message);
-                    message = scanner.nextLine();
-
+                    incomingRequest = scanner.nextLine();
                 }
                 System.out.println(hashMap.toString());
                 connectionSocket.close();
