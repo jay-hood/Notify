@@ -1,8 +1,8 @@
-package sample;
+package Model_Version;
 
 //import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
-//import javafx.scene.control.Button;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,11 +11,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+//import javafx.scene.control.Button;
+
 public class Controller {
+
     private String userMessage;
     private Boolean connectionStatus = true;
     private Socket socket;
@@ -23,12 +25,18 @@ public class Controller {
     private String host;
     private Scanner receiver;
     private PrintWriter printWriter;
+    private final Model model;
+    private FXMLLoader loadConnectionWindow;
 
     @FXML
     private TextArea userEntry;
 
     @FXML
     private TextArea receivedMessages;
+
+    public Controller(Model model){
+        this.model = model;
+    }
 
 
     public void initConnection(){
@@ -52,26 +60,32 @@ public class Controller {
      */
     public void submitButtonClicked(){
         userMessage = userEntry.getText().replaceAll("\n", System.getProperty("line.separator"));
+        receivedMessages.setText(userMessage);
         userEntry.clear();
-        printWriter.println(userMessage);
+        //printWriter.println(userMessage);
     }
 
+    public void setFXMLLoader(FXMLLoader loadConnectionWindow){
+        this.loadConnectionWindow = loadConnectionWindow;
+    }
+    
+
     public void connectionClicked(){
-        try{
-            FXMLLoader loadConnectionWindow = new FXMLLoader(getClass().getResource("connection.fxml"));
+        try {
             Parent root1 = loadConnectionWindow.load();
             Stage stage = new Stage();
             stage.setTitle("Connection Details");
             stage.setScene(new Scene(root1));
             stage.show();
+            model.setStage(stage);
         }
         catch(IOException iex){
             iex.printStackTrace();
         }
     }
 
-    public void setHost(String host){
-        this.host = host;
+    public void setHost(){
+        this.host = model.getAddress();
     }
 
 
