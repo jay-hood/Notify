@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,7 +75,7 @@ public class Server {
             try{
                 scanner = new Scanner(connectionSocket.getInputStream());
                 pw = new PrintWriter(connectionSocket.getOutputStream(), true);
-                incomingRequest = scanner.nextLine();
+                //incomingRequest = scanner.nextLine();
 
 
                 /*
@@ -91,7 +92,8 @@ public class Server {
                 */
                 //hashMap.put(message,pw);
                 //I think this is the "read message" location that the commenter on reddit was talking about.
-                while (incomingRequest!= null) {
+                while (scanner.hasNextLine()) {
+                    incomingRequest = scanner.nextLine();
                     System.out.println(incomingRequest);
                     for(ConnectionHandler out : hashMap.values()){
                         //if(out.getPrintWriter()!=this.pw) {
@@ -100,7 +102,7 @@ public class Server {
                         //}
                     }
                     //pw.println(message);
-                    incomingRequest = scanner.nextLine();
+                    //incomingRequest = scanner.nextLine();
                 }
                 System.out.println(hashMap.toString());
                 connectionSocket.close();
@@ -109,6 +111,7 @@ public class Server {
                 iex.printStackTrace();
             }
         }
+
     }
 
 

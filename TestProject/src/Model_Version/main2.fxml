@@ -18,7 +18,7 @@
                     <items>
                         <MenuItem fx:id="changeUsername" mnemonicParsing="false" text="Change Username" />
                         <MenuItem fx:id="Connection" mnemonicParsing="false" onAction="#connectionClicked" text="Connection" />
-                  <MenuItem fx:id="Close" mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="Close" mnemonicParsing="false" onAction="#close" text="Close" />
                     </items>
                 </Menu>
             </menus>
@@ -32,12 +32,12 @@
                           <Label alignment="CENTER" prefHeight="17.0" prefWidth="122.0" text="Connected Users" underline="true" />
                     </children>
                 </AnchorPane>
-            <ScrollPane prefHeight="249.0" prefWidth="517.0">
+            <ScrollPane hbarPolicy="NEVER" prefHeight="249.0" prefWidth="517.0">
                <content>
-                  <TextArea fx:id="receivedMessages" prefHeight="248.0" prefWidth="502.0" />
+                  <TextArea fx:id="receivedMessages" prefHeight="248.0" prefWidth="502.0" wrapText="true" />
                </content>
             </ScrollPane>
-            <TextArea fx:id="userEntry" layoutY="249.0" prefHeight="125.0" prefWidth="517.0" />
+            <TextArea fx:id="userEntry" layoutY="249.0" prefHeight="125.0" prefWidth="517.0" wrapText="true" />
             </children>
         </AnchorPane>
     </children>

@@ -61,7 +61,8 @@ public class Controller {
     add genuine communications.
      */
     public void submitButtonClicked(){
-        userMessage = userEntry.getText().replaceAll("\n", System.getProperty("line.separator"));
+        userMessage = userEntry.getText().replaceAll("\n", " ");
+        //userMessage = userEntry.getText();
         //receivedMessages.setText(userMessage);//testing receivedMessages
         model.sendMessage(getUserMessage());
         userEntry.clear();
@@ -96,7 +97,9 @@ public class Controller {
         this.host = model.getAddress();
     }
 
-
+    public void close(){
+        System.exit(0);
+    }
 
 
     public String getUserMessage() {
