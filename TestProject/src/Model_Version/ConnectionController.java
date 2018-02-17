@@ -15,6 +15,9 @@ public class ConnectionController {
     private TextField username;
 
     @FXML
+    private TextField usName;
+
+    @FXML
     private TextField address;
 
     @FXML
@@ -25,9 +28,16 @@ public class ConnectionController {
     }
 
     public void submitConnectionClicked(){
-      model.setAddress(address.getText());
-      model.setUsername(username.getText());
-      model.getStage().close();
+        model.clearConnection();
+        model.setAddress(address.getText());
+        model.setUsername(username.getText());
+        model.getConnectionStage().close();
+        model.initConnection();
+    }
+
+    public void setUsername(){
+        model.setUsername(usName.getText());
+        model.getUsernameStage().close();
     }
 
 }

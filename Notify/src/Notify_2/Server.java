@@ -58,6 +58,7 @@ public class Server {
         private Scanner scanner;
         private String incomingRequest;
         private PrintWriter pw;
+        //private String username;
 
 
         public PrintWriter getPrintWriter(){
@@ -93,10 +94,10 @@ public class Server {
                 while (incomingRequest!= null) {
                     System.out.println(incomingRequest);
                     for(ConnectionHandler out : hashMap.values()){
-                        if(out.getPrintWriter()!=this.pw) {
+                        //if(out.getPrintWriter()!=this.pw) {
                             System.out.println("Sending message.");
                             out.getPrintWriter().println(incomingRequest);
-                        }
+                        //}
                     }
                     //pw.println(message);
                     incomingRequest = scanner.nextLine();

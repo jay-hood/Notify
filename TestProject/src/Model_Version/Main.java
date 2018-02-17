@@ -15,7 +15,7 @@ public class Main extends Application {
 
 
         Model model = new Model();
-        FXMLLoader primary = new FXMLLoader(getClass().getResource("main.fxml"));
+        FXMLLoader primary = new FXMLLoader(getClass().getResource("main2.fxml"));
         Model_Version.Controller controller = new Model_Version.Controller(model);
         primary.setController(controller);
         Parent root = primary.load();
@@ -23,12 +23,19 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-
-
         FXMLLoader connection = new FXMLLoader(getClass().getResource("connection.fxml"));
-        connection.setController(new Model_Version.ConnectionController(model));
-        controller.setFXMLLoader(connection);
-        controller.connectionClicked();
+        ConnectionController conController = new Model_Version.ConnectionController((model));
+        connection.setController(conController);
+
+        FXMLLoader username = new FXMLLoader(getClass().getResource("username.fxml"));
+        username.setController(conController);
+
+        Parent root2 = connection.load();
+        Parent root3 = username.load();
+
+        controller.setConnectionRoot(root2);
+        controller.setUsernameRoot(root3);
+        controller.connectionStartUp();
 
     }
 

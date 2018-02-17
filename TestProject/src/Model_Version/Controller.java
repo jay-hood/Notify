@@ -26,7 +26,8 @@ public class Controller {
     private Scanner receiver;
     private PrintWriter printWriter;
     private final Model model;
-    private FXMLLoader loadConnectionWindow;
+    private Parent loadConnectionWindow;
+    private Parent loadUsernameWindow;
 
     @FXML
     private TextArea userEntry;
@@ -39,6 +40,7 @@ public class Controller {
     }
 
 
+    /*
     public void initConnection(){
         try {
             //host = InetAddress.getLocalHost();
@@ -53,35 +55,41 @@ public class Controller {
             iex.printStackTrace();
         }
     }
-    /*
+
     I think a good idea would be to test the functionality by passing the text from the user entry box
     to the received messages box. Just to make sure everything works alright and formats properly before attempting to
     add genuine communications.
      */
     public void submitButtonClicked(){
         userMessage = userEntry.getText().replaceAll("\n", System.getProperty("line.separator"));
-        receivedMessages.setText(userMessage);
+        //receivedMessages.setText(userMessage);//testing receivedMessages
+        model.sendMessage(getUserMessage());
         userEntry.clear();
         //printWriter.println(userMessage);
     }
 
-    public void setFXMLLoader(FXMLLoader loadConnectionWindow){
-        this.loadConnectionWindow = loadConnectionWindow;
+    public void setConnectionRoot(Parent root){
+        this.loadConnectionWindow = root;
     }
-    
 
-    public void connectionClicked(){
-        try {
-            Parent root1 = loadConnectionWindow.load();
+    public void setUsernameRoot(Parent root){
+        this.loadUsernameWindow = root;
+    }
+
+
+    public void connectionStartUp(){
+
+            model.setTextArea(receivedMessages);
             Stage stage = new Stage();
             stage.setTitle("Connection Details");
-            stage.setScene(new Scene(root1));
+            stage.setScene(new Scene(loadConnectionWindow));
             stage.show();
-            model.setStage(stage);
-        }
-        catch(IOException iex){
-            iex.printStackTrace();
-        }
+            model.setConnectionStage(stage);
+
+    }
+
+    public void connectionClicked(){
+        model.getConnectionStage().show();
     }
 
     public void setHost(){
@@ -90,9 +98,18 @@ public class Controller {
 
 
 
-    /*
-    public String getUserMessage(){
-        return userMessage;
+
+    public String getUserMessage() {
+        return model.getUsername() + ": " + userMessage;
+    }
+
+    public void changeUsername(){
+
+            Stage stage = new Stage();
+            stage.setTitle("Change Username");
+            stage.setScene(new Scene(loadUsernameWindow));
+            stage.show();
+            model.setUsernameStage(stage);
     }
 
     public void setReceivedMessages(String message){
@@ -104,13 +121,13 @@ public class Controller {
     public boolean getConnectionStatus(){
         return connectionStatus;
     }
-    */
+
 
     public void connectionClosed(){
         connectionStatus = false;
         userEntry.setText("Connection closed.");
     }
-
+    /*
     private class InboundMessageHandler implements Runnable {
 
         private String message = "";
@@ -128,4 +145,5 @@ public class Controller {
             }
         }
     }
+    */
 }
