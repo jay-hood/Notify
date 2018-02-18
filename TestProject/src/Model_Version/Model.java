@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Model {
@@ -35,6 +36,7 @@ public class Model {
     }
 
     public void initConnection(){
+        connectionStatus = true;
         try {
             if(address.equals("host")) {
                 host = InetAddress.getLocalHost();
@@ -81,8 +83,18 @@ public class Model {
         }
     }
 
+
     public void clearConnection(){
         host = null;
+        connectionStatus = false;
+        if(socket!=null){
+            try {
+                socket.close();
+            }
+            catch(IOException iex){
+                iex.printStackTrace();
+            }
+        }
         socket = null;
         receiver = null;
         printWriter = null;
@@ -137,7 +149,7 @@ public class Model {
         @Override
         public void run(){
             while(connectionStatus){
-                message = receiver.nextLine();
+                    message = receiver.nextLine();
                 Platform.runLater(() ->{
                     textarea.appendText(message + "\n");
                 });

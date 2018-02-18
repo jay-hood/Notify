@@ -42,7 +42,7 @@ public class Server {
         try{
             while (true) {
                 socket = serverSocket.accept();
-                ConnectionHandler CH = new ConnectionHandler(socket);
+                ConnectionHandler CH = new ConnectionHandler(ID, socket);
                 Thread connection = new Thread(CH);
                 connection.start();
                 hashMap.put(ID, CH);
@@ -59,6 +59,7 @@ public class Server {
         private Scanner scanner;
         private String incomingRequest;
         private PrintWriter pw;
+        private int handlerID;
         //private String username;
 
 
@@ -66,8 +67,11 @@ public class Server {
             return this.pw;
         }
 
-        public ConnectionHandler(Socket socket) {
+        public ConnectionHandler(int handlerID, Socket socket) {
+
+            this.handlerID = handlerID;
             this.connectionSocket = socket;
+
         }
         //next step is to test the hashmap and then iterate through it, getting each printwriter
         //and using it to send the message to everyone.
@@ -106,6 +110,7 @@ public class Server {
                 }
                 System.out.println(hashMap.toString());
                 connectionSocket.close();
+                hashMap.remove(handlerID);
             }
             catch (IOException iex) {
                 iex.printStackTrace();
